@@ -2,6 +2,7 @@ version: '2'
 services:
   jenkins:
     image: sadofrazer/jenkins
+    container_name : jenkins_nmd
     restart: always
     ports:
       - '8080:8080'
@@ -15,3 +16,4 @@ services:
 volumes:
   jenkins_home:
     driver: local
+
