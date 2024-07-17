@@ -41,21 +41,12 @@ pipeline {
             }
         }
 
-        stage('Push Docker Image') {
-            steps {
-                script {
-                    docker.withRegistry('https://registry.hub.docker.com', 'docker-hub-credentials') {
-                        sh "docker push ic-webapp:${VERSION}"
-                    }
-                }
-            }
-        }
 
         stage('Deploy to Production') {
             steps {
                 ansiblePlaybook(
-                    playbook: 'ansible/playbook.yml',
-                    inventory: 'ansible/inventory'
+                    playbook: '../roles/deploy_odoo.yml',
+                    inventory: '../roles/inventory.yml'
                 )
             }
         }
