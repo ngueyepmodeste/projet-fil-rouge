@@ -31,17 +31,18 @@ pipeline {
             }
         }
 
-        stage('Build Docker Image') {
+       stage('Build Docker Image') {
             steps {
                 script {
-                    // Construire l'image Docker avec les variables d'environnement
-                    sh """
-                        docker build --build-arg ODOO_URL=${ODOO_URL} --build-arg PGADMIN_URL=${PGADMIN_URL} -t ic-webapp:${VERSION} .
-                    """
+                    def version = readFile('release.txt').trim()
+                    def dockerImage = "ic-webapp:${version}"
+
+                    sh "docker build --build-arg ODOO_URL=ODOO_URL: --build-arg PGADMIN_URL=PGADMIN_URL: -t ${dockerImage} ."
                 }
             }
         }
-
+    }
+}
         stage('Test Docker Image') {
             steps {
                 script {
@@ -53,19 +54,7 @@ pipeline {
             }
         }
         
-        stage('Push Docker Image') {
-            steps {
-                script {
-                    // Pousser l'image Docker sur Docker Hub
-                    withCredentials([string(credentialsId: 'docker-hub-credentials', variable: 'DOCKER_HUB_PASSWORD')]) {
-                        sh """
-                            echo $DOCKER_HUB_PASSWORD | docker login -u 'your-docker-hub-username' --password-stdin
-                            docker push ic-webapp:${VERSION}
-                        """
-                    }
-                }
-            }
-        }
+      
 
         stage('Deploy to Production') {
             steps {
