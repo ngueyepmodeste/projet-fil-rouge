@@ -14,13 +14,13 @@ pipeline {
                 script {
                     // Lire les valeurs du fichier releases.txt
                     def releaseInfo = readFile('releases.txt').trim().split("\n")
-                    ODOO_URL = releaseInfo[0].split(" ")[0]
-                    PGADMIN_URL = releaseInfo[1].split(" ")[0]
-                    VERSION = releaseInfo[2].split(" ")[0]
+                    env.ODOO_URL = releaseInfo[0].split(" ")[1]
+                    env.PGADMIN_URL = releaseInfo[1].split(" ")[1]
+                    env.VERSION = releaseInfo[2].split(" ")[1]
                 }
-                echo "ODOO_URL: ${ODOO_URL}"
-                echo "PGADMIN_URL: ${PGADMIN_URL}"
-                echo "VERSION: ${VERSION}"
+                echo "ODOO_URL: ${env.ODOO_URL}"
+                echo "PGADMIN_URL: ${env.PGADMIN_URL}"
+                echo "VERSION: ${env.VERSION}"
             }
         }
 
@@ -31,40 +31,38 @@ pipeline {
             }
         }
 
-       stage('Build Docker Image') {
+        stage('Build Docker Image') {
             steps {
                 script {
-                    def version = readFile('release.txt').trim()
-                    def dockerImage = "ic-webapp:${version}"
+                    def dockerImage = "ic-webapp:${env.VERSION}"
 
-                    sh "docker build --build-arg ODOO_URL=ODOO_URL: --build-arg PGADMIN_URL=PGADMIN_URL: -t ${dockerImage} ."
+                    sh "docker build --build-arg ODOO_URL=${env.ODOO_URL} --build-arg PGADMIN_URL=${env.PGADMIN_URL} -t ${dockerImage} ."
                 }
             }
         }
-        
+
         stage('Test Docker Image') {
             steps {
                 script {
                     // Lancer un container pour tester l'image
                     sh """
-                        docker run --name test-ic-webapp -d -p 8080:8080 ic-webapp:${VERSION}
+                        docker run --name test-ic-webapp -d -p 8080:8080 ic-webapp:${env.VERSION}
                     """
                 }
             }
         }
-        
-      
 
         stage('Deploy to Production') {
             steps {
                 script {
                     // Déployer l'application en production avec Ansible
                     sh """
-                        ansible-playbook -i inventory deploy.yml --extra-vars "version=${VERSION} odoo_url=${ODOO_URL} pgadmin_url=${PGADMIN_URL}"
+                        ansible-playbook -i inventory deploy.yml --extra-vars "version=${env.VERSION} odoo_url=${env.ODOO_URL} pgadmin_url=${env.PGADMIN_URL}"
                     """
                 }
             }
         }
+    }
 
     post {
         always {
@@ -72,7 +70,7 @@ pipeline {
                 // Nettoyer les containers et images après le build
                 sh """
                     docker rm -f test-ic-webapp || true
-                    docker rmi ic-webapp:${VERSION} || true
+                    docker rmi ic-webapp:${env.VERSION} || true
                 """
             }
         }
