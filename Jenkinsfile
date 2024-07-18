@@ -44,9 +44,9 @@ pipeline {
         stage('Deploy to Production') {
             steps {
                 script {
-                    // Déployer l'application en production avec Ansible
+                    // Utiliser une image Docker contenant Ansible pour déployer
                     sh """
-                        ansible-playbook -i ./ansible/inventory.yml  ./ansible/deploy_odoo.yml --extra-vars "version=${env.VERSION} odoo_url=${env.ODOO_URL} pgadmin_url=${env.PGADMIN_URL}"
+                        docker run --rm -v ${pwd()}:/workspace -v /etc/ansible:/etc/ansible -w /workspace williamyeh/ansible:alpine3 ansible-playbook -i ./ansible/inventory.yml ./ansible/deploy_odoo.yml --extra-vars "version=${env.VERSION} odoo_url=${env.ODOO_URL} pgadmin_url=${env.PGADMIN_URL}"
                     """
                 }
             }
