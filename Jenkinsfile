@@ -46,7 +46,7 @@ pipeline {
                 script {
                     // Déployer l'application en production avec Ansible
                     sh """
-                        ansible-playbook -i inventory.yml deploy_odoo.yml --extra-vars "version=${env.VERSION} odoo_url=${env.ODOO_URL} pgadmin_url=${env.PGADMIN_URL}"
+                        ansible-playbook -i ./ansible/inventory.yml  ./ansible/deploy_odoo.yml --extra-vars "version=${env.VERSION} odoo_url=${env.ODOO_URL} pgadmin_url=${env.PGADMIN_URL}"
                     """
                 }
             }
