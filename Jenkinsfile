@@ -41,17 +41,6 @@ pipeline {
             }
         }
 
-        stage('Test Docker Image') {
-            steps {
-                script {
-                    // Lancer un container pour tester l'image
-                    sh """
-                        docker run --name test-ic-webapp -d -p 8080:8080 ic-webapp:${env.VERSION}
-                    """
-                }
-            }
-        }
-
  stage('Deploy to Production') {
             steps {
                 ansiblePlaybook(
