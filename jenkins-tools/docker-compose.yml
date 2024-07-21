@@ -4,7 +4,7 @@ services:
     # image: 'bitnami/jenkins:2'
     # image: dirane/jenkins-docker-ansible-clair
     image: eazytraining/jenkins
-    container_name : jenkins_nmd
+    container_name: jenkins_nmd
     ports:
       - '8080:8080'
       - '443:8443'

@@ -1,13 +1,16 @@
-version: "2"
-services: 
-  
-   vitrine: 
-     image: ngueyepmodeste/ic-webapp:1.1
-     container_name: vitrine
-     ports:
+version: '3'
+
+services:
+  pgadmin:
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: "modestengueyep1@gmail.com"
+      PGADMIN_DEFAULT_PASSWORD: "modeste123"
+    ports:
       - "80:8080"
-   
-   pgadmin:
-     image: dpage/pgadmin4
-     container_name: db
-     
+    volumes:
+      - pgadmin-data:/var/lib/pgadmin
+
+volumes:
+  pgadmin-data:
+
