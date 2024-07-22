@@ -1,8 +1,9 @@
 ---
 prod:
   hosts:
-    172.31.88.63:
-    172.31.83.53:
+    172.31.80.179:
+    172.31.84.97:
+    172.31.92.218:
       vars:
 
          ansible_ssh_common_args: '-o StrictHostKeyChecking=no'

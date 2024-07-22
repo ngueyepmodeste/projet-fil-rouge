@@ -1,4 +1,4 @@
-- hosts: 172.31.88.63
+- hosts: 172.31.80.179
   become: true
 
   pre_tasks:
@@ -25,7 +25,7 @@
   roles:
     - role: odoo_role
 
-- hosts: 172.31.83.53
+- hosts:  172.31.84.97
   become: true
   vars:
     ansible_ssh_private_key_file: /home/ubuntu/jenkins_key.pem
@@ -55,3 +55,14 @@
   roles:
     - role: pgadmin_role
 
+- hosts: 172.31.92.218
+  become: true
+  vars:
+    ansible_ssh_private_key_file: /home/ubuntu/jenkins_key.pem
+    ansible_user: ubuntu
+
+  vars_files:
+    - vars/main.yml  
+
+  roles:
+    - role: vitrine_roles
