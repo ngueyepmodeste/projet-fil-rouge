@@ -23,41 +23,21 @@ pipeline {
         stage('Deploy Odoo') {
             steps {
                 // Execute the Ansible playbook for Odoo
-                ansiblePlaybook(
-                    playbook: 'deploy_odoo.yml',
-                    inventory: 'inventory.yml',
-                    limit: '172.31.80.179'
-                )
+                sh 'ansible-playbook /home/ubuntu/projet-fil-rouge/ansible/deploy_odoo.yml -i /home/ubuntu/projet-fil-rouge/ansible/inventory.yml -l 172.31.80.179'
             }
         }
 
         stage('Deploy pgAdmin') {
             steps {
                 // Execute the Ansible playbook for pgAdmin
-                ansiblePlaybook(
-                    playbook: 'deploy_odoo.yml',
-                    inventory: 'inventory.yml',
-                    extraVars: [
-                        ansible_ssh_private_key_file: '/home/ubuntu/jenkins_key.pem',
-                        ansible_user: 'ubuntu'
-                    ],
-                    limit: '172.31.84.97'
-                )
+                sh 'ansible-playbook /home/ubuntu/projet-fil-rouge/ansible/deploy_odoo.yml -i /home/ubuntu/projet-fil-rouge/ansible/inventory.yml --extra-vars "ansible_ssh_private_key_file=/home/ubuntu/jenkins_key.pem ansible_user=ubuntu" -l 172.31.84.97'
             }
         }
 
         stage('Deploy Vitrine') {
             steps {
                 // Execute the Ansible playbook for Vitrine
-                ansiblePlaybook(
-                    playbook: 'deploy_odoo.yml',
-                    inventory: 'inventory.yml',
-                    extraVars: [
-                        ansible_ssh_private_key_file: '/home/ubuntu/jenkins_key.pem',
-                        ansible_user: 'ubuntu'
-                    ],
-                    limit: '172.31.92.218'
-                )
+                sh 'ansible-playbook /home/ubuntu/projet-fil-rouge/ansible/deploy_odoo.yml -i /home/ubuntu/projet-fil-rouge/ansible/inventory.yml --extra-vars "ansible_ssh_private_key_file=/home/ubuntu/jenkins_key.pem ansible_user=ubuntu" -l 172.31.92.218'
             }
         }
     }
