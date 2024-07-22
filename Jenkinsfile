@@ -6,14 +6,20 @@ pipeline {
     }
 
     stages {
-        stage('Checkout') {
+        stage('Cleanup Workspace') {
             steps {
-                // Checkout your code repository containing the Ansible playbooks and roles
-                git 'https://github.com/ngueyepmodeste/projet-fil-rouge.git'
+                // Clean the workspace before checkout
+                cleanWs()
             }
         }
         
-        
+        stage('Checkout') {
+            steps {
+                // Checkout your code repository containing the Ansible playbooks and roles
+                git branch: 'main', url: 'https://github.com/ngueyepmodeste/projet-fil-rouge.git'
+            }
+        }
+
         stage('Deploy Odoo') {
             steps {
                 // Execute the Ansible playbook for Odoo
