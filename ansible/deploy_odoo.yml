@@ -24,7 +24,7 @@
         mode: '0755'
 
   roles:
-    - role: odoo_role
+    - role: /var/lib/jenkins/workspace/CI-CD/ansible/roles/odoo_role
 
 - hosts:  172.31.44.98
   become: true
@@ -54,7 +54,7 @@
         mode: '0755'
 
   roles:
-    - role: pgadmin_role
+    - role: /var/lib/jenkins/workspace/CI-CD/ansible/roles/pgadmin_role
 
 - hosts: 172.31.37.114
   become: true
@@ -66,4 +66,4 @@
     - vars/main.yml  
 
   roles:
-    - role: vitrine_roles
+    - role: /var/lib/jenkins/workspace/CI-CD/ansible/roles/vitrine_roles
