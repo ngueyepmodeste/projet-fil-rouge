@@ -1,12 +1,11 @@
 ---
 prod:
   hosts:
-    172.31.38.16:
-    172.31.44.98:
-    172.31.37.114:
-      vars:
-
-         ansible_ssh_common_args: '-o StrictHostKeyChecking=no'
-         ansible_ssh_private_key_file: /home/ubuntu/jenkins_key.pem
-         ansible_user: ubuntu
+    172.31.47.192:
+    172.31.44.197:
+    172.31.34.247:
+  vars:
+    ansible_ssh_common_args: '-o StrictHostKeyChecking=no'
+    ansible_ssh_private_key_file: /home/ubuntu/jenkins_key.pem
+    ansible_user: ubuntu
 
