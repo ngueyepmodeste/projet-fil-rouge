@@ -1,8 +1,8 @@
 pipeline {
     agent {
         docker {
-            image 'geerlingguy/ansible:latest' // Image Docker avec Ansible préinstallé
-            args '-u root' // Exécute avec l'utilisateur root
+            image 'ansible/ansible:latest' // Utiliser une autre image Ansible
+            args '-u root'
         }
     }
 
@@ -30,19 +30,19 @@ pipeline {
 
         stage('Deploy Odoo') {
             steps {
-                sh "ansible-playbook ${env.ANSIBLE_PLAYBOOK} -i ${env.INVENTORY_FILE} -l 172.31.46.53"
+                sh "ansible-playbook ${env.ANSIBLE_PLAYBOOK} -i ${env.INVENTORY_FILE} -l 172.31.38.16"
             }
         }
 
         stage('Deploy pgAdmin') {
             steps {
-                sh "ansible-playbook ${env.ANSIBLE_PLAYBOOK} -i ${env.INVENTORY_FILE} --extra-vars 'ansible_ssh_private_key_file=${env.JENKINS_KEY} ansible_user=${env.ANSIBLE_USER}' -l 172.31.36.253"
+                sh "ansible-playbook ${env.ANSIBLE_PLAYBOOK} -i ${env.INVENTORY_FILE} --extra-vars 'ansible_ssh_private_key_file=${env.JENKINS_KEY} ansible_user=${env.ANSIBLE_USER}' -l 172.31.44.98"
             }
         }
 
         stage('Deploy Vitrine') {
             steps {
-                sh "ansible-playbook ${env.ANSIBLE_PLAYBOOK} -i ${env.INVENTORY_FILE} --extra-vars 'ansible_ssh_private_key_file=${env.JENKINS_KEY} ansible_user=${env.ANSIBLE_USER}' -l 172.31.42.221"
+                sh "ansible-playbook ${env.ANSIBLE_PLAYBOOK} -i ${env.INVENTORY_FILE} --extra-vars 'ansible_ssh_private_key_file=${env.JENKINS_KEY} ansible_user=${env.ANSIBLE_USER}' -l 172.31.37.114"
             }
         }
     }
