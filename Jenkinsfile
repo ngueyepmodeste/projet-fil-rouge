@@ -1,7 +1,7 @@
 pipeline {
     agent {
         docker {
-            image 'ansible/ansible-runner:latest' // Image Ansible Runner
+            image 'ansible/ansible:latest' // Utiliser l'image Ansible officielle
             args '-u root'
         }
     }
@@ -30,19 +30,31 @@ pipeline {
 
         stage('Deploy Odoo') {
             steps {
-                sh "ansible-playbook ${env.ANSIBLE_PLAYBOOK} -i ${env.INVENTORY_FILE} -l 172.31.38.16"
+                ansiblePlaybook credentialsId: 'dev-server', 
+                    disableHostKeyChecking: true, 
+                    extras: "-i ${env.INVENTORY_FILE} -l 172.31.38.16", 
+                    installation: 'ansible', 
+                    playbook: env.ANSIBLE_PLAYBOOK
             }
         }
 
         stage('Deploy pgAdmin') {
             steps {
-                sh "ansible-playbook ${env.ANSIBLE_PLAYBOOK} -i ${env.INVENTORY_FILE} --extra-vars 'ansible_ssh_private_key_file=${env.JENKINS_KEY} ansible_user=${env.ANSIBLE_USER}' -l 172.31.44.98"
+                ansiblePlaybook credentialsId: 'dev-server', 
+                    disableHostKeyChecking: true, 
+                    extras: "--extra-vars 'ansible_ssh_private_key_file=${env.JENKINS_KEY} ansible_user=${env.ANSIBLE_USER}' -i ${env.INVENTORY_FILE} -l 172.31.44.98", 
+                    installation: 'ansible', 
+                    playbook: env.ANSIBLE_PLAYBOOK
             }
         }
 
         stage('Deploy Vitrine') {
             steps {
-                sh "ansible-playbook ${env.ANSIBLE_PLAYBOOK} -i ${env.INVENTORY_FILE} --extra-vars 'ansible_ssh_private_key_file=${env.JENKINS_KEY} ansible_user=${env.ANSIBLE_USER}' -l 172.31.37.114"
+                ansiblePlaybook credentialsId: 'dev-server', 
+                    disableHostKeyChecking: true, 
+                    extras: "--extra-vars 'ansible_ssh_private_key_file=${env.JENKINS_KEY} ansible_user=${env.ANSIBLE_USER}' -i ${env.INVENTORY_FILE} -l 172.31.37.114", 
+                    installation: 'ansible', 
+                    playbook: env.ANSIBLE_PLAYBOOK
             }
         }
     }
