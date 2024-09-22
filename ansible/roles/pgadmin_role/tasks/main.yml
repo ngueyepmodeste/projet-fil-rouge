@@ -1,0 +1,8 @@
+---
+- name: Deploy Odoo using Docker Compose
+  template:
+    src: docker-compose-pgadmin.yml.j2
+    dest: /home/ubuntu/docker-compose-pgadmin.yml
+
+- name: Run Docker Compose
+  command: docker-compose -f /home/ubuntu/docker-compose-pgadmin.yml up -d

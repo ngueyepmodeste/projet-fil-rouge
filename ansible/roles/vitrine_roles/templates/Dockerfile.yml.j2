@@ -1,0 +1,27 @@
+ARG VERSION
+FROM python:{{label.VERSION}}
+
+ARG YOUR_NAME
+ARG YOUR_EMAIL
+
+LABEL maintainer="{{label.YOUR_NAME}}" email="{{label.YOUR_EMAIL}}"
+WORKDIR /opt
+
+COPY app.py /opt/app.py
+COPY images /opt/images
+COPY templates /opt/templates
+COPY static /opt/static
+COPY requirements.txt /opt/requirements.txt
+RUN pip install -r requirements.txt
+
+COPY . .
+
+ARG ODOO_URL
+ARG PGADMIN_URL
+
+ENV ODOO_URL={{app_icgroup_url.ODOO_URL}}
+ENV PGADMIN_URL={{app_icgroup_url.PGADMIN_URL}}
+
+EXPOSE 8080
+
+CMD ["python", "app.py"]

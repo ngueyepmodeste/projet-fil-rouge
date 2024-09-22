@@ -1,0 +1,8 @@
+---
+- name: Deploy Odoo using Docker Compose
+  template:
+    src: docker-compose-odoo.yml.j2
+    dest: /home/ubuntu/docker-compose-odoo.yml
+
+- name: Run Docker Compose
+  command: docker-compose -f /home/ubuntu/docker-compose-odoo.yml up -d

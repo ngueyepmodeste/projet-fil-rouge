@@ -1,0 +1,32 @@
+version: '{{odoo_version}}'
+services:
+  {{NOM_SERVICE_WEB}}:
+    image: {{odoo_image}}
+    container_name: {{nom_conteneur_web}}
+    depends_on:
+      - {{NOM_SERVICE_DB}}
+    ports:
+      - "{{port_ex}}:8069"
+    environment:
+      - HOST={{VARS_HOST}}
+      - USER={{VARS_USER}}
+      - PASSWORD={{VARS_PASSWORD}}
+    volumes:
+      - {{vars_odoo_volumes}}:/var/lib/odoo
+      - ./config:/etc/odoo
+
+  {{NOM_SERVICE_DB}}:
+    image: {{image_db}}
+    container_name: {{VARS_HOST}}
+    environment:
+      - POSTGRES_DB={{VARS_POSTGRES_DB}}
+      - POSTGRES_PASSWORD={{VARS_PASSWORD}}
+      - POSTGRES_USER={{VARS_USER}}
+      - PGDATA=/var/lib/postgresql/data/pgdata
+    volumes:
+      - {{vars_db_volumes}}:/var/lib/postgresql/data/pgdata
+
+volumes:
+  {{vars_db_volumes}}:
+  {{vars_odoo_volumes}}:
+

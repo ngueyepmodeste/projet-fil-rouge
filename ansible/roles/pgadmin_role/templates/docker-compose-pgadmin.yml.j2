@@ -1,0 +1,16 @@
+version: '{{VERSION}}'
+
+services:
+  pgadmin:
+    image: {{image_pgadmin}}
+    environment:
+      PGADMIN_DEFAULT_EMAIL: "{{your_email}}"
+      PGADMIN_DEFAULT_PASSWORD: "{{your_password}}"
+    ports:
+      - "{{port_ex}}:{{port_apply}}"
+    volumes:
+      - {{volume_pgadmin}}:/var/lib/pgadmin
+
+volumes:
+  {{volume_pgadmin}}:
+

@@ -1,0 +1,16 @@
+label:
+
+  VERSION: 3.6-alpine
+  YOUR_NAME: MODESTE DOLUMIN NGUEYEP 
+  YOUR_EMAIL: modestengueyep1@gmail.com 
+
+app_icgroup_url:
+
+  ODOO_URL: https://www.odoo.com/
+  PGADMIN_URL: https://www.pgadmin.org/
+
+your_container_name: vitrine
+image_version: 1.1
+PORT_EX: 80
+repo_cible: /home/ubuntu
+image_name: group6

@@ -1,0 +1,17 @@
+---
+# Variables for Odoo deployment
+
+odoo_version: 3.1
+NOM_SERVICE_WEB: web
+odoo_image: odoo:17.0
+nom_conteneur_web: odoo
+NOM_SERVICE_DB: mydb
+port_ex: 8069
+VARS_HOST: db_momo
+VARS_PASSWORD: myodoo
+VARS_POSTGRES_DB: postgres
+VARS_USER: odoo
+vars_odoo_volumes: odoo-web-data
+vars_db_volumes: odoo-db-data
+image_db: postgres:15
+

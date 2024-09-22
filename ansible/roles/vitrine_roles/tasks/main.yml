@@ -1,0 +1,79 @@
+---
+
+# Différentes tâches à exécuter dans notre rôle Ansible
+
+- name: Template the Dockerfile
+  ansible.builtin.template:
+    src: Dockerfile.yml.j2
+    dest: "{{ repo_cible }}/Dockerfile"
+
+- name: Copier le dossier images
+  synchronize:
+      src: /home/ubuntu/projet-fil-rouge/images
+      dest: "{{ repo_cible }}"
+      recursive: yes
+
+- name: Copier le dossier templates
+  synchronize:
+      src: /home/ubuntu/projet-fil-rouge/templates
+      dest: "{{ repo_cible }}"
+      recursive: yes
+
+- name: Copier le  dossier static
+  synchronize:
+      src: /home/ubuntu/projet-fil-rouge/static
+      dest: "{{ repo_cible }}"
+      recursive: yes
+
+- name: Copier le fichier requirements.txt
+  copy:
+      src: /home/ubuntu/projet-fil-rouge/requirements.txt
+      dest: "{{ repo_cible }}"
+      
+
+- name: Copier l'application proprement-dit
+  copy:
+      src: /home/ubuntu/projet-fil-rouge/app.py
+      dest: "{{ repo_cible }}"
+      
+
+
+# Install Docker
+- name: Install Docker
+  ansible.builtin.apt:
+    name: docker.io
+    state: present
+
+# Start and enable Docker
+- name: Start and enable Docker
+  ansible.builtin.service:
+    name: docker
+    state: started
+    enabled: true
+
+# Run the httpd image as a container
+#- name: Run the httpd image
+#  community.docker.docker_container:
+#    name: "{{ your_container_name }}"
+#    image: "ngueyepmodeste/ic-webapp:{{ image_version }}"
+#    state: started
+#    ports:
+#      - "{{ PORT_EX }}:8080"
+
+
+- name: Build Docker image
+  community.docker.docker_image:
+    name: "{{image_name}}"
+    tag:  "{{ image_version }}"
+    build:
+      path: /home/ubuntu
+    source: build
+    state: present
+
+- name: Run Docker container
+  community.docker.docker_container:
+    name:  "{{ your_container_name }}"
+    image: "{{ image_name }}:{{ image_version }}"
+    state: started
+    ports:
+       - "{{ PORT_EX }}:8080"   # Expose container port 80 to host port 8080

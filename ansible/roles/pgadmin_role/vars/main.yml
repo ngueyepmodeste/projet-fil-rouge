@@ -1,0 +1,8 @@
+VERSION: '3'
+image_pgadmin: dpage/pgadmin4
+your_email: modestengueyep1@gmail.com
+your_password: modeste123
+port_ex: 80
+port_apply: 80
+volume_pgadmin: pgadmin-data
+
