@@ -1,7 +1,7 @@
 pipeline {
     agent {
         docker {
-            image 'ansible/ansible:latest' // Utiliser une autre image Ansible
+            image 'ansible/ansible-runner:latest' // Image Ansible Runner
             args '-u root'
         }
     }
