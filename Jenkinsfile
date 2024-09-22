@@ -20,6 +20,7 @@ pipeline {
         stage('Checkout') {
             steps {
                 git branch: 'main', url: env.GITHUB_REPO
+                sh 'ls -R ansible/roles/odoo_role/vars/'
             }
         }
 
@@ -41,21 +42,36 @@ pipeline {
 
         stage('Deploy Odoo') {
             steps {
-                sh "pwd"
+                script {
+                    def fileExists = fileExists 'ansible/roles/odoo_role/vars/main.yml'
+                    if (!fileExists) {
+                        error "Le fichier ansible/roles/odoo_role/vars/main.yml n'existe pas."
+                    }
+                }
                 sh "ansible-playbook ${env.ANSIBLE_PLAYBOOK} -i ${env.INVENTORY_FILE} -l 172.31.46.53 -e @./ansible/roles/odoo_role/vars/main.yml"
             }
         }
 
         stage('Deploy pgAdmin') {
             steps {
-                sh "pwd"
+                script {
+                    def fileExists = fileExists 'ansible/roles/pgadmin_role/vars/main.yml'
+                    if (!fileExists) {
+                        error "Le fichier ansible/roles/pgadmin_role/vars/main.yml n'existe pas."
+                    }
+                }
                 sh "ansible-playbook ${env.ANSIBLE_PLAYBOOK} -i ${env.INVENTORY_FILE} --extra-vars 'ansible_ssh_private_key_file=${env.JENKINS_KEY} ansible_user=${env.ANSIBLE_USER}' -l 172.31.36.253 -e @./ansible/roles/pgadmin_role/vars/main.yml"
             }
         }
 
         stage('Deploy Vitrine') {
             steps {
-                sh "pwd"
+                script {
+                    def fileExists = fileExists 'ansible/roles/vitrine_roles/vars/main.yml'
+                    if (!fileExists) {
+                        error "Le fichier ansible/roles/vitrine_roles/vars/main.yml n'existe pas."
+                    }
+                }
                 sh "ansible-playbook ${env.ANSIBLE_PLAYBOOK} -i ${env.INVENTORY_FILE} --extra-vars 'ansible_ssh_private_key_file=${env.JENKINS_KEY} ansible_user=${env.ANSIBLE_USER}' -l 172.31.42.221 -e @./ansible/roles/vitrine_roles/vars/main.yml"
             }
         }
