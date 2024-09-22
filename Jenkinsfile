@@ -1,10 +1,5 @@
 pipeline {
-    agent {
-        docker {
-            image 'ansible/ansible:latest' // Utiliser l'image Ansible officielle
-            args '-u root'
-        }
-    }
+    agent any  // Utilisation du noeud Jenkins par défaut
 
     environment {
         ANSIBLE_HOST_KEY_CHECKING = 'false'
@@ -28,33 +23,40 @@ pipeline {
             }
         }
 
+        stage('Install Ansible') {
+            steps {
+                // Vérifie si Ansible est installé, sinon l'installer
+                script {
+                    def ansibleInstalled = sh(script: 'command -v ansible-playbook', returnStatus: true) == 0
+                    if (!ansibleInstalled) {
+                        sh '''
+                        echo "Ansible n'est pas installé. Installation..."
+                        sudo apt-get update
+                        sudo apt-get install -y software-properties-common
+                        sudo add-apt-repository --yes --update ppa:ansible/ansible
+                        sudo apt-get update
+                        sudo apt-get install -y ansible
+                        '''
+                    }
+                }
+            }
+        }
+
         stage('Deploy Odoo') {
             steps {
-                ansiblePlaybook credentialsId: 'dev-server', 
-                    disableHostKeyChecking: true, 
-                    extras: "-i ${env.INVENTORY_FILE} -l 172.31.38.16", 
-                    installation: 'ansible', 
-                    playbook: env.ANSIBLE_PLAYBOOK
+                sh "ansible-playbook ${env.ANSIBLE_PLAYBOOK} -i ${env.INVENTORY_FILE} -l 172.31.38.16"
             }
         }
 
         stage('Deploy pgAdmin') {
             steps {
-                ansiblePlaybook credentialsId: 'dev-server', 
-                    disableHostKeyChecking: true, 
-                    extras: "--extra-vars 'ansible_ssh_private_key_file=${env.JENKINS_KEY} ansible_user=${env.ANSIBLE_USER}' -i ${env.INVENTORY_FILE} -l 172.31.44.98", 
-                    installation: 'ansible', 
-                    playbook: env.ANSIBLE_PLAYBOOK
+                sh "ansible-playbook ${env.ANSIBLE_PLAYBOOK} -i ${env.INVENTORY_FILE} --extra-vars 'ansible_ssh_private_key_file=${env.JENKINS_KEY} ansible_user=${env.ANSIBLE_USER}' -l 172.31.44.98"
             }
         }
 
         stage('Deploy Vitrine') {
             steps {
-                ansiblePlaybook credentialsId: 'dev-server', 
-                    disableHostKeyChecking: true, 
-                    extras: "--extra-vars 'ansible_ssh_private_key_file=${env.JENKINS_KEY} ansible_user=${env.ANSIBLE_USER}' -i ${env.INVENTORY_FILE} -l 172.31.37.114", 
-                    installation: 'ansible', 
-                    playbook: env.ANSIBLE_PLAYBOOK
+                sh "ansible-playbook ${env.ANSIBLE_PLAYBOOK} -i ${env.INVENTORY_FILE} --extra-vars 'ansible_ssh_private_key_file=${env.JENKINS_KEY} ansible_user=${env.ANSIBLE_USER}' -l 172.31.37.114"
             }
         }
     }
