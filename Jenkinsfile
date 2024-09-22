@@ -4,7 +4,7 @@ pipeline {
     environment {
         ANSIBLE_HOST_KEY_CHECKING = 'false'
         GITHUB_REPO = 'https://github.com/ngueyepmodeste/projet-fil-rouge.git'
-        ANSIBLE_PLAYBOOK = 'ansible/deploy_odoo.yml'
+        ANSIBLE_PLAYBOOK = 'ansible/deploy_app.yml'
         INVENTORY_FILE = 'ansible/inventory.yml'
         JENKINS_KEY = '/home/ubuntu/jenkins_key.pem'
         ANSIBLE_USER = 'ubuntu'
@@ -31,11 +31,8 @@ pipeline {
                     if (!ansibleInstalled) {
                         sh '''
                         echo "Ansible n'est pas installé. Installation..."
-                        sudo apt-get update
-                        sudo apt-get install -y software-properties-common
-                        sudo add-apt-repository --yes --update ppa:ansible/ansible
-                        sudo apt-get update
-                        sudo apt-get install -y ansible
+                        sudo yum install -y epel-release
+                        sudo yum install -y ansible
                         '''
                     }
                 }
