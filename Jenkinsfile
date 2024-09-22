@@ -41,18 +41,21 @@ pipeline {
 
         stage('Deploy Odoo') {
             steps {
+                sh "pwd"
                 sh "ansible-playbook ${env.ANSIBLE_PLAYBOOK} -i ${env.INVENTORY_FILE} -l 172.31.46.53 -e @roles/vars/main.yml"
             }
         }
 
         stage('Deploy pgAdmin') {
             steps {
+                sh "pwd"
                 sh "ansible-playbook ${env.ANSIBLE_PLAYBOOK} -i ${env.INVENTORY_FILE} --extra-vars 'ansible_ssh_private_key_file=${env.JENKINS_KEY} ansible_user=${env.ANSIBLE_USER}' -l 172.31.36.253 -e @roles/vars/main.yml"
             }
         }
 
         stage('Deploy Vitrine') {
             steps {
+                sh "pwd"
                 sh "ansible-playbook ${env.ANSIBLE_PLAYBOOK} -i ${env.INVENTORY_FILE} --extra-vars 'ansible_ssh_private_key_file=${env.JENKINS_KEY} ansible_user=${env.ANSIBLE_USER}' -l 172.31.42.221 -e @roles/vars/main.yml"
             }
         }
