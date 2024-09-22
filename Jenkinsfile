@@ -1,5 +1,10 @@
 pipeline {
-    agent any
+    agent {
+        docker {
+            image 'geerlingguy/ansible:latest' // Image Docker avec Ansible préinstallé
+            args '-u root' // Exécute avec l'utilisateur root
+        }
+    }
 
     environment {
         ANSIBLE_HOST_KEY_CHECKING = 'false'
@@ -14,21 +19,6 @@ pipeline {
         stage('Cleanup Workspace') {
             steps {
                 cleanWs()
-            }
-        }
-
-        stage('Install Ansible') { // Nouveau stage pour installer Ansible
-            steps {
-                sh '''
-                    # Installer Ansible si nécessaire
-                    if ! command -v ansible-playbook &> /dev/null; then
-                        echo "Ansible n'est pas installé. Installation..."
-                        sudo apt-get update
-                        sudo apt-get install -y ansible
-                    else
-                        echo "Ansible est déjà installé."
-                    fi
-                '''
             }
         }
 
