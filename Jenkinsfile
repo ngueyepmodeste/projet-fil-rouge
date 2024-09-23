@@ -57,7 +57,7 @@ pipeline {
                 }
                 sh 'ls -l ansible/roles/odoo_role/vars/'  // Ajout d'une étape de débogage
                 sh 'pwd'  // Vérification du répertoire de travail
-                sh "ansible-playbook ${env.ANSIBLE_PLAYBOOK} -i ${env.INVENTORY_FILE} -l 172.31.46.53 -e @$(pwd)/ansible/roles/odoo_role/vars/main.yml"
+                sh "ansible-playbook ${env.ANSIBLE_PLAYBOOK} -i ${env.INVENTORY_FILE} -l 172.31.46.53 -e @\$(pwd)/ansible/roles/odoo_role/vars/main.yml"
             }
         }
 
@@ -71,7 +71,7 @@ pipeline {
                         echo "Le fichier ansible/roles/pgadmin_role/vars/main.yml existe."
                     }
                 }
-                sh "ansible-playbook ${env.ANSIBLE_PLAYBOOK} -i ${env.INVENTORY_FILE} --extra-vars 'ansible_ssh_private_key_file=${env.JENKINS_KEY} ansible_user=${env.ANSIBLE_USER}' -l 172.31.36.253 -e @$(pwd)/ansible/roles/pgadmin_role/vars/main.yml"
+                sh "ansible-playbook ${env.ANSIBLE_PLAYBOOK} -i ${env.INVENTORY_FILE} --extra-vars 'ansible_ssh_private_key_file=${env.JENKINS_KEY} ansible_user=${env.ANSIBLE_USER}' -l 172.31.36.253 -e @\$(pwd)/ansible/roles/pgadmin_role/vars/main.yml"
             }
         }
 
@@ -85,7 +85,7 @@ pipeline {
                         echo "Le fichier ansible/roles/vitrine_roles/vars/main.yml existe."
                     }
                 }
-                sh "ansible-playbook ${env.ANSIBLE_PLAYBOOK} -i ${env.INVENTORY_FILE} --extra-vars 'ansible_ssh_private_key_file=${env.JENKINS_KEY} ansible_user=${env.ANSIBLE_USER}' -l 172.31.42.221 -e @$(pwd)/ansible/roles/vitrine_roles/vars/main.yml"
+                sh "ansible-playbook ${env.ANSIBLE_PLAYBOOK} -i ${env.INVENTORY_FILE} --extra-vars 'ansible_ssh_private_key_file=${env.JENKINS_KEY} ansible_user=${env.ANSIBLE_USER}' -l 172.31.42.221 -e @\$(pwd)/ansible/roles/vitrine_roles/vars/main.yml"
             }
         }
     }
