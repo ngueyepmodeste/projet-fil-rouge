@@ -26,7 +26,6 @@ pipeline {
 
         stage('Install Ansible') {
             steps {
-                // Vérifie si Ansible est installé, sinon l'installer
                 script {
                     def ansibleInstalled = sh(script: 'command -v ansible-playbook', returnStatus: true) == 0
                     if (!ansibleInstalled) {
@@ -40,6 +39,12 @@ pipeline {
             }
         }
 
+        stage('Set Permissions') {
+            steps {
+                sh 'chmod 644 ansible/roles/odoo_role/vars/main.yml'
+            }
+        }
+
         stage('Deploy Odoo') {
             steps {
                 script {
@@ -50,6 +55,7 @@ pipeline {
                         echo "Le fichier ansible/roles/odoo_role/vars/main.yml existe."
                     }
                 }
+                sh 'ls -l ansible/roles/odoo_role/vars/'  // Ajout d'une étape de débogage
                 sh "ansible-playbook ${env.ANSIBLE_PLAYBOOK} -i ${env.INVENTORY_FILE} -l 172.31.46.53 -e @ansible/roles/odoo_role/vars/main.yml"
             }
         }
