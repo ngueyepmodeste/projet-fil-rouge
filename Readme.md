@@ -31,7 +31,7 @@ Ci-dessous un aperçu du site vitrine attendu.
 **NB :** L’image** créée devra permettre de lancer un container permettant d’héberger ce site web et ayant les liens adéquats permettant d’accéder à nos applications internes 
 
 
-## **2) Conteneurisation de l’application web.** 
+## **2) Conteneurisation de l’application web** 
 
 Il s’agit en effet d’une application web python utilisant le module Flask. Les étapes à suivre pour la conteneurisation de cette application sont les suivantes : 
 
